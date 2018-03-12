@@ -1,6 +1,6 @@
 fn factorial(num: u8) -> usize {
     let mut result: usize = 1;
-    for x in 1..num as u8 {
+    for x in 1..num as usize {
         result *= x;
     }
     return result;
