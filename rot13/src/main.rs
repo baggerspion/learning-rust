@@ -1,30 +1,24 @@
 use std::env;
 
-fn rot13(txt: &String) {
-    let mut result: String = "".to_string();
+fn rot13(chr: char) -> char {
+    let start = match chr {
+        'a'...'z' => 'a' as u8,
+        'A'...'Z' => 'A' as u8,
+        _ => return chr
+    };
 
-    // For simplicity we convert to lowercase before switching to byte vals
-    // A/a == 97, Z/z == 122
-    // We baulk at any other char
-    for chr in txt.to_ascii_lowercase().as_bytes() {
-        if chr < &97 || chr > &122 {
-            result = "Out of range chars found!".to_string();
-            break;
-        } else {
-            // Good grief, I know there must be a smarter way to do this
-            if (chr + 13) <= 122 {
-                result.push((chr + 13) as char);
-            } else {
-                let overrun: u8 = (chr + 13) - 122;
-                result.push((96 + overrun) as char);
-            }
-        }
-    }
-
-    println!("{}", result);
+    let pos = chr as u8 - start;
+    let rot = (pos + 13) % 26;
+    (rot + start) as char
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    rot13(&args[1]);
+    let mut result: String = "".to_string();
+
+    for letter in args[1].chars() {
+        result.push(rot13(letter));
+    }
+
+    println!("{}", result);
 }
